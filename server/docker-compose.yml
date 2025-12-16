@@ -1,0 +1,14 @@
+services:
+  whisper:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - API_TOKEN=${API_TOKEN:-changeme}
+      - WHISPER_MODEL=${WHISPER_MODEL:-small}
+    volumes:
+      # Cache whisper models to avoid re-downloading
+      - whisper-cache:/root/.cache/whisper
+
+volumes:
+  whisper-cache:
