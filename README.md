@@ -4,6 +4,10 @@ A cross-platform voice-to-text typing tool. Hold a hotkey, speak, and your words
 
 **100% local and private** - Your voice never leaves your machine.
 
+**I built this for myself.** After decades of living in the terminal, my typing still sucks. AI CLI tools like Claude Code, aider, and Copilot CLI are amazing - but only if you can get your thoughts into them fast enough. I couldn't. Now I just talk.
+
+If you're a developer who loves the command line but your fingers can't keep up with your brain, this is for you.
+
 ## Architecture
 
 ```
