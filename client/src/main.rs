@@ -101,7 +101,10 @@ fn start_recording(recorder: &Arc<Mutex<audio::Recorder>>) {
 }
 
 fn stop_and_transcribe(config: &Config, recorder: &Arc<Mutex<audio::Recorder>>) {
-    RECORDING.store(false, Ordering::SeqCst);
+    // Atomic check - only proceed if we're actually transitioning from recording to not recording
+    if !RECORDING.compare_exchange(true, false, Ordering::SeqCst, Ordering::SeqCst).is_ok() {
+        return; // Already stopped by another key release
+    }
 
     print!("🛑 Processing... ");
     use std::io::Write;
