@@ -31,11 +31,22 @@ If you're a developer who loves the command line but your fingers can't keep up 
 ### Server
 
 ```bash
-cd server
-docker compose up -d
+docker run -d -p 8000:8000 ghcr.io/alanef/local-voice-type-server:latest
+```
+
+Or with options:
+
+```bash
+docker run -d -p 8000:8000 \
+  -e WHISPER_MODEL=small \
+  -e API_TOKEN=your-secret-token \
+  -v whisper-cache:/root/.cache/whisper \
+  ghcr.io/alanef/local-voice-type-server:latest
 ```
 
 ### Client
+
+Download from [Releases](https://github.com/alanef/local-voice-type/releases) or build:
 
 ```bash
 cd client

@@ -67,17 +67,29 @@ jobs:
 
   build-server:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v4
 
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build Docker image
         working-directory: server
-        run: docker build -t local-voice-type-server .
+        run: docker build -t ghcr.io/alanef/local-voice-type-server:latest .
 
       - name: Test server starts
-        working-directory: server
         run: |
-          docker run -d --name test-server -p 8000:8000 -e WHISPER_MODEL=tiny local-voice-type-server
+          docker run -d --name test-server -p 8000:8000 -e WHISPER_MODEL=tiny ghcr.io/alanef/local-voice-type-server:latest
           sleep 30
           curl -f http://localhost:8000/v1/health || exit 1
           docker stop test-server
+
+      - name: Push to GHCR
+        run: docker push ghcr.io/alanef/local-voice-type-server:latest
