@@ -2,7 +2,7 @@ import os
 import tempfile
 from fastapi import FastAPI, File, UploadFile, HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import whisper
+from faster_whisper import WhisperModel
 
 app = FastAPI(title="Voice Type API", version="1.0.0")
 security = HTTPBearer()
@@ -13,9 +13,9 @@ model = None
 @app.on_event("startup")
 async def load_model():
     global model
-    model_size = os.getenv("WHISPER_MODEL", "base")
+    model_size = os.getenv("WHISPER_MODEL", "small")
     print(f"Loading Whisper model: {model_size}")
-    model = whisper.load_model(model_size)
+    model = WhisperModel(model_size, device="cpu", compute_type="int8")
     print("Model loaded!")
 
 def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
@@ -54,8 +54,8 @@ async def transcribe(
 
     try:
         # Transcribe with specified language
-        result = model.transcribe(tmp_path, language=language)
-        text = result["text"].strip()
+        segments, _ = model.transcribe(tmp_path, language=language)
+        text = " ".join(segment.text for segment in segments).strip()
         return {"text": text}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Transcription failed: {str(e)}")
