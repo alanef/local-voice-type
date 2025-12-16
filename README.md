@@ -8,6 +8,14 @@ A cross-platform voice-to-text typing tool. Hold a hotkey, speak, and your words
 
 If you're a developer who loves the command line but your fingers can't keep up with your brain, this is for you.
 
+## Easy Install
+
+**Save time** - get pre-compiled binaries for all platforms:
+
+[![Get it on Gumroad](https://img.shields.io/badge/Get_Binaries-Gumroad-pink)](https://fullworks.gumroad.com/l/local-voice-type)
+
+Or build from source (see below).
+
 ## Architecture
 
 ```
